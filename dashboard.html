@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Student Dashboard</h2>
+<a href="{{ url_for('logout') }}">Logout</a>
+<form method="POST" style="margin-bottom: 20px;">
+  <input type="text" name="name" placeholder="Add student name" required>
+  <button type="submit">➕ Add Student</button>
+</form>
+<table id="studentTable">
+  <thead>
+    <tr><th>Name</th><th>Present</th><th>Absent</th><th>Remove</th></tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    <tr>
+      <td>{{ student.name }}</td>
+      <td><form method="POST" action="{{ url_for('mark_attendance') }}">
+        <input type="hidden" name="student_id" value="{{ student.id }}">
+        <input type="hidden" name="status" value="Present">
+        <button type="submit">✅</button>
+      </form></td>
+      <td><form method="POST" action="{{ url_for('mark_attendance') }}">
+        <input type="hidden" name="student_id" value="{{ student.id }}">
+        <input type="hidden" name="status" value="Absent">
+        <button type="submit">❌</button>
+      </form></td>
+      <td><a href="{{ url_for('delete_student', id=student.id) }}">🗑️</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('report') }}">View Reports</a>
+{% endblock %}

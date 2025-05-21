@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Attendance Report</h2>
+<a href="{{ url_for('logout') }}">Logout</a>
+<form method="POST" style="margin-bottom: 20px;">
+  <label>Start Date:</label>
+  <input type="date" name="start_date" required>
+  <label>End Date:</label>
+  <input type="date" name="end_date" required>
+  <button type="submit">Filter</button>
+</form>
+<a href="{{ url_for('export_csv') }}" style="margin-bottom: 15px; display:inline-block;">📄 Download CSV</a>
+<table id="reportTable">
+  <thead><tr><th>Name</th><th>Date</th><th>Status</th><th>Edit</th></tr></thead>
+  <tbody>
+    {% for row in data %}
+    <tr>
+      <td>{{ row.name }}</td>
+      <td>{{ row.date }}</td>
+      <td>{{ row.status }}</td>
+      <td><a href="{{ url_for('edit_attendance', id=row.aid) }}">✏️</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Attendance Percentages</h3>
+<table>
+  <thead><tr><th>Name</th><th>Present</th><th>Total</th><th>Percentage</th></tr></thead>
+  <tbody>
+    {% for s in stats.values() %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.present }}</td>
+      <td>{{ s.total }}</td>
+      <td>{{ s.percent }}%</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
